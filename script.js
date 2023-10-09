@@ -15,6 +15,10 @@ buttons.forEach(button => {
   });
 });
 
+function isMobileDevice() {
+  return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+}
+
 function gatherResource() {
   resourceCount += shipLevel;
   updateDisplay();
@@ -27,9 +31,13 @@ function upgradeSpaceship() {
     shipLevel++;
     updateDisplay();
   } else {
-    showPopup("Not enough resources to upgrade spaceship!");
+    // Check if it's a mobile device, if not, show the popup
+    if (!isMobileDevice()) {
+      showPopup("Not enough resources to upgrade spaceship!");
+    }
   }
 }
+
 
 function discoverPlanet() {
   const planetCost = Math.ceil(20 * Math.pow(1.5, planetCount));
@@ -38,9 +46,15 @@ function discoverPlanet() {
     resourceCount -= planetCost;
     updateDisplay();
   } else if (shipLevel < planetCount + 1) {
-    showPopup("Upgrade your spaceship to discover more planets!");
+    // Check if it's a mobile device, if not, show the popup
+    if (!isMobileDevice()) {
+      showPopup("Upgrade your spaceship to discover more planets!");
+    }
   } else {
-    showPopup("Not enough resources to discover a new planet!");
+    // Check if it's a mobile device, if not, show the popup
+    if (!isMobileDevice()) {
+      showPopup("Not enough resources to discover a new planet!");
+    }
   }
 }
 
@@ -55,9 +69,12 @@ function prestige() {
     updateAutoGathererCost();
     updateDisplay();
   } else {
-    showPopup("Discover at least 5 planets to prestige!");
+          // Check if it's a mobile device, if not, show the popup
+          if (!isMobileDevice()) {
+            showPopup("Not enough resources to buy an Asteroid Miner!");
+      }
+    }
   }
-}
 
 function buyAutoGatherer() {
   if (autoGathererCount < autoGathererLimit) {
@@ -69,10 +86,16 @@ function buyAutoGatherer() {
       updateDisplay();
       startAutoGatherer();
     } else {
-      showPopup("Not enough resources to buy an Asteroid Miner!");
+      // Check if it's a mobile device, if not, show the popup
+      if (!isMobileDevice()) {
+        showPopup("Not enough resources to buy an Asteroid Miner!");
+      }
     }
   } else {
-    showPopup("You've reached the limit of Asteroid Miners!");
+    // Check if it's a mobile device, if not, show the popup
+    if (!isMobileDevice()) {
+      showPopup("You've reached the limit of Asteroid Miners!");
+    }
   }
 }
 
@@ -90,14 +113,36 @@ function startAutoGatherer() {
 function updateDisplay() {
   document.getElementById("resourceCount").innerText = resourceCount;
   document.getElementById("autoGathererCount").innerText = autoGathererCount;
-  document.getElementById("autoGathererCost").innerText = Math.ceil(autoGathererCost * Math.pow(autoGathererCostIncrease, autoGathererCount));
 
   const spaceshipCost = Math.ceil(10 * Math.pow(1.2, shipLevel - 1));
   document.getElementById("spaceshipUpgradeCost").innerText = spaceshipCost;
+  if (resourceCount < spaceshipCost){
+    document.getElementById("upgradeSpaceshipButton").disabled = true;
+  } else {
+    document.getElementById("upgradeSpaceshipButton").disabled = false;
+  }
   
-
   const planetCost = Math.ceil(20 * Math.pow(1.5, planetCount));
   document.getElementById("planetDiscoveryCost").innerText = planetCost;
+  if (resourceCount < planetCost){
+    document.getElementById("discoverPlanetButton").disabled = true;
+  } else {
+    document.getElementById("discoverPlanetButton").disabled = false;
+  }
+
+  const autoGathererCost = Math.ceil(10 * Math.pow(autoGathererCostIncrease, autoGathererCount));
+  document.getElementById("autoGathererCost").innerText = Math.ceil(10 * Math.pow(autoGathererCostIncrease, autoGathererCount));
+  if (resourceCount < autoGathererCost){
+    document.getElementById("buyAutoGathererButton").disabled = true;
+  } else {
+    document.getElementById("buyAutoGathererButton").disabled = false;
+  }
+
+  if (planetCount < 5) {
+    document.getElementById("prestige").disabled = true;
+  } else {
+    document.getElementById("prestige").disabled = false;
+  }
 }
 
 function showPopup(message) {
@@ -114,10 +159,37 @@ function closePopup() {
 }
 
 
-// Function to close the welcome popup
-function closeWelcomePopup() {
-  const welcomePopup = document.getElementById("welcome-popup-overlay");
-  welcomePopup.style.display = "none";
+// Add a variable to track the current step of the welcome popup
+let welcomePopupStep = 0;
+
+function showWelcomePopup() {
+  const welcomePopupOverlay = document.getElementById("welcome-popup-overlay");
+  welcomePopupOverlay.style.display = "flex";
+  showWelcomePopupStep(welcomePopupStep);
 }
+
+function showWelcomePopupStep(step) {
+  const welcomePopupSteps = document.querySelectorAll('.welcome-popup-step');
+  welcomePopupSteps.forEach((stepElem, index) => {
+    if (index === step) {
+      stepElem.style.display = 'block';
+    } else {
+      stepElem.style.display = 'none';
+    }
+  });
+}
+
+function nextWelcomePopupStep() {
+  welcomePopupStep++;
+  showWelcomePopupStep(welcomePopupStep);
+}
+
+function closeWelcomePopup() {
+  const welcomePopupOverlay = document.getElementById("welcome-popup-overlay");
+  welcomePopupOverlay.style.display = "none";
+  updateDisplay();
+}
+
+showWelcomePopupStep(0)
 
 updateDisplay();
