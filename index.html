@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <title>Space Explorer Incremental Game</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -17,6 +17,7 @@
       <div class="resource-label">Resources:</div>
       <div class="resource-count" id="resourceCount">0</div>
     </div>
+
     <div class="resource-bar">
       <div class="resource-section">
         <div class="resource-label">Spaceship Level:</div>
@@ -31,11 +32,6 @@
         <div class="resource-count" id="autoGathererCount">0</div>
       </div>
     </div>
-<!----  <div class="resource-section">
-      <div class="resource-label">Prestige level:</div>
-      <div class="resource-count" id="prestigeLevel">0</div>
-    </div>
-  </div>-->
 
     <div id="controls">
       <div class="game-section">
@@ -51,11 +47,12 @@
         <button id="buyAutoGathererButton" onclick="buyAutoGatherer()">Buy Asteroid Miner<br>(Cost: <span id="autoGathererCost">10</span> resources)</button>
       </div>
       <div class="game-section">
-        <button onclick="prestige()">Prestige</button>
+        <button id="prestige" onclick="prestige()">Prestige<br>(Cost: have 5 planets)</button>
       </div>
     </div>
-  </div>
 
+
+  </div>
   <div id="popup" class="popup">
     <div class="popup-content">
       <p id="popupText"></p>
@@ -64,20 +61,34 @@
 
   <div id="welcome-popup-overlay" class="welcome-popup-overlay">
     <div id="welcome-popup" class="welcome-popup">
-      <h2>Welcome, Space Explorer!</h2>
-      <p>Your mission is to explore the cosmos and gather valuable resources.</p>
-      <p>Click the "Gather Resources" button to manually collect resources.</p>
-      <p>Unlock the "Asteroid Miner" to automatically gather resources for you.</p>
-      <p>Upgrade your spaceship to increase your resource gathering efficiency.</p>
-      <p>Discover new planets and reach for the stars!</p>
-      <br>
-      <h3>Prestige Mechanic:</h3>
-      <p>After exploring the universe and amassing experience, you can choose to <strong>prestige</strong>. Prestiging resets your progress but grants you a permanent bonus, making future explorations more fruitful.</p>
-      <p>Collect prestige points by discovering planets. Every time you prestige, you gain <strong>1 additional maximum asteroid miner</strong>, allowing you to gather resources more efficiently in future journeys.</p>
-      <button onclick="closeWelcomePopup()">Begin Your Journey</button>
+      <div class="welcome-popup-step">
+        <h2>Welcome, Space Explorer!</h2>
+        <p>Your mission is to explore the cosmos and gather valuable resources.</p>
+        <button onclick="nextWelcomePopupStep()">Next</button>
+      </div>
+      <div class="welcome-popup-step">
+        <p>Click the "Gather Resources" button to manually collect resources.</p>
+        <button onclick="nextWelcomePopupStep()">Next</button>
+      </div>
+      <div class="welcome-popup-step">
+        <p>Unlock the "Asteroid Miner" to automatically gather resources for you.</p>
+        <button onclick="nextWelcomePopupStep()">Next</button>
+      </div>
+      <div class="welcome-popup-step">
+        <p>Upgrade your spaceship to increase your resource gathering efficiency.</p>
+        <button onclick="nextWelcomePopupStep()">Next</button>
+      </div>
+      <div class="welcome-popup-step">
+        <h3>Prestige:</h3>
+        <p>Collect prestige points by discovering planets. Every time you prestige, you gain <strong>1 additional maximum asteroid miner</strong>, allowing you to gather resources more efficiently in future journeys.</p>
+        <button onclick="nextWelcomePopupStep()">Next</button>
+      </div>
+      <div class="welcome-popup-step">
+        <h3>Discover new planets and reach for the stars!</h3>
+        <button onclick="closeWelcomePopup()">Begin Your Journey</button>
+      </div>
     </div>
   </div>
-
 
   <script src="script.js"></script>
 </body>
