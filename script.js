@@ -111,8 +111,15 @@ function startAutoGatherer() {
 }
 
 function updateDisplay() {
+  console.log(resourceCount)
+  console.log(shipLevel)
+  console.log(planetCount)
+  console.log(autoGathererCount)
+  console.log(prestigeLevel)
   document.getElementById("resourceCount").innerText = resourceCount;
   document.getElementById("autoGathererCount").innerText = autoGathererCount;
+  document.getElementById("spaceshipLevel").innerText = shipLevel;
+  document.getElementById("discoveredPlanets").innerText = planetCount;
 
   const spaceshipCost = Math.ceil(10 * Math.pow(1.2, shipLevel - 1));
   document.getElementById("spaceshipUpgradeCost").innerText = spaceshipCost;
